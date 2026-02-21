@@ -19,17 +19,16 @@ pip install -r requirements.txt
 python app.py
 
 Backend runs at:
-
 http://localhost:5000
+
 3️⃣ Frontend Setup (React)
 cd frontend
 npm install
 npm start
 
 Frontend runs at:
-
 http://localhost:3000
----
+
 📌 Overview
 
 FleetFlow replaces manual logbooks with a centralized digital fleet command center.
@@ -128,3 +127,56 @@ fleetflow/
 │
 ├── README.md
 └── .gitignore
+🔌 API Endpoints
+Method	Endpoint	Description
+GET	/vehicles	List vehicles
+POST	/vehicles	Create vehicle
+GET	/drivers	List drivers
+POST	/drivers	Create driver
+GET	/dashboard	Fleet KPIs
+🧪 MVP Test Flow
+
+Start backend
+
+Start frontend
+
+Add vehicle (e.g., VAN001, 500kg)
+
+Add driver
+
+Verify dashboard metrics update
+
+🚧 Future Enhancements
+
+Trip management system
+
+Maintenance scheduling
+
+Expense tracking
+
+Cost-per-km analytics
+
+Authentication (JWT)
+
+PostgreSQL production migration
+
+Deployment pipeline
+
+🌍 Deployment (Optional)
+
+Frontend → Vercel / Netlify
+
+Backend → Render / Railway
+
+Database → PostgreSQL
+
+🤝 Contributing
+git checkout -b feature/new-feature
+git commit -m "Add new feature"
+git push origin feature/new-feature
+
+Open a Pull Request for review.
+
+📄 License
+
+MIT License © 2026 FleetFlow Team
