@@ -6,109 +6,14 @@
 
 ---
 
-## 📌 Overview
-
-FleetFlow replaces manual logbooks with a **centralized digital fleet command center**.
-
-It helps organizations manage:
-
-- 🚘 Vehicles
-- 👨‍✈️ Drivers
-- 🚚 Trip Dispatch
-- 📊 Utilization & Performance Tracking
-
----
-
-## 🎯 Key Features
-
-### 📊 Command Center Dashboard
-- Active fleet tracking
-- Utilization rate calculation
-- Maintenance alerts
-- Real-time updates
-
----
-
-### 🚘 Vehicle Management
-- Add / Edit / Delete vehicles
-- Unique license plate validation
-- Capacity tracking (kg)
-- Status control:
-  - Available
-  - In Shop
-  - On Trip
-
----
-
-### 👨‍✈️ Driver Registry
-- Driver creation
-- Assignment validation
-- Compliance tracking (future scope)
-
----
-
-### 🚚 Trip Dispatch Logic
-
-**Workflow:**
-1. Select available vehicle
-2. Assign driver
-3. Enter cargo weight
-4. Validate cargo < vehicle capacity
-5. Dispatch
-
-**Business Rules:**
-- Vehicles marked “In Shop” cannot be dispatched
-- Cargo exceeding capacity is blocked
-- Expired driver licenses block assignment (planned)
-
----
-
-## 🏗️ Tech Stack
-
-| Layer | Technology |
-|-------|------------|
-| Backend | Flask + SQLAlchemy + SQLite |
-| Frontend | React 18 + Material UI |
-| API | RESTful JSON |
-| Database | SQLite (PostgreSQL-ready) |
-
----
-
-## 📁 Project Structure
-
-
-fleetflow/
-│
-├── backend/
-│ ├── app.py
-│ ├── models.py
-│ ├── instance/
-│ │ └── fleetflow.db
-│ └── requirements.txt
-│
-├── frontend/
-│ ├── public/
-│ ├── src/
-│ │ ├── App.js
-│ │ ├── index.js
-│ │ └── components/
-│ ├── package.json
-│ └── package-lock.json
-│
-├── README.md
-└── .gitignore
-
-
----
-
-## 🚀 Getting Started
+## 🚀 Setup & Installation
 
 ### 1️⃣ Clone Repository
 
 ```bash
 git clone https://github.com/vishesh-017/fleetflow.git
 cd fleetflow
-2️⃣ Backend Setup
+2️⃣ Backend Setup (Flask)
 cd backend
 pip install -r requirements.txt
 python app.py
@@ -116,7 +21,7 @@ python app.py
 Backend runs at:
 
 http://localhost:5000
-3️⃣ Frontend Setup
+3️⃣ Frontend Setup (React)
 cd frontend
 npm install
 npm start
@@ -124,56 +29,101 @@ npm start
 Frontend runs at:
 
 http://localhost:3000
-🔌 API Endpoints
-Method	Endpoint	Description
-GET	/vehicles	List vehicles
-POST	/vehicles	Create vehicle
-GET	/drivers	List drivers
-POST	/drivers	Create driver
-GET	/dashboard	Fleet KPIs
-🧪 MVP Test Flow
+📌 Overview
 
-Start backend
+FleetFlow replaces manual logbooks with a centralized digital fleet command center.
 
-Start frontend
+It helps organizations manage:
 
-Add vehicle (e.g., VAN001, 500kg)
+🚘 Vehicles
 
-Add driver
+👨‍✈️ Drivers
 
-Verify dashboard metrics update
+🚚 Trip Dispatch
 
-🚧 Future Enhancements
+📊 Utilization & Performance Tracking
 
-Trip management system
+🎯 Key Features
+📊 Command Center Dashboard
 
-Maintenance scheduling
+Active fleet tracking
 
-Expense tracking
+Utilization rate calculation
 
-Cost-per-km analytics
+Maintenance alerts
 
-Authentication (JWT)
+Real-time updates
 
-PostgreSQL production migration
+🚘 Vehicle Management
 
-Deployment pipeline
+Add / Edit / Delete vehicles
 
-🌍 Deployment (Planned)
+Unique license plate validation
 
-Backend → Render / Railway
+Capacity tracking (kg)
 
-Frontend → Vercel / Netlify
+Status control:
 
-Database → PostgreSQL
+Available
 
-🤝 Contributing
-git checkout -b feature/new-feature
-git commit -m "Add new feature"
-git push origin feature/new-feature
+In Shop
 
-Open a Pull Request for review.
+On Trip
 
-📄 License
+👨‍✈️ Driver Registry
 
-MIT License © 2026 FleetFlow Team
+Driver creation
+
+Assignment validation
+
+Compliance tracking (future scope)
+
+🚚 Trip Dispatch Logic
+
+Workflow:
+
+Select available vehicle
+
+Assign driver
+
+Enter cargo weight
+
+Validate cargo < vehicle capacity
+
+Dispatch
+
+Business Rules:
+
+Vehicles marked “In Shop” cannot be dispatched
+
+Cargo exceeding capacity is blocked
+
+Expired driver licenses block assignment (planned)
+
+🏗️ Tech Stack
+Layer	Technology
+Backend	Flask + SQLAlchemy + SQLite
+Frontend	React 18 + Material UI
+API	RESTful JSON
+Database	SQLite (PostgreSQL-ready)
+📁 Project Structure
+fleetflow/
+│
+├── backend/
+│   ├── app.py
+│   ├── models.py
+│   ├── instance/
+│   │   └── fleetflow.db
+│   └── requirements.txt
+│
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── App.js
+│   │   ├── index.js
+│   │   └── components/
+│   ├── package.json
+│   └── package-lock.json
+│
+├── README.md
+└── .gitignore
