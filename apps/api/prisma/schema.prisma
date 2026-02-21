@@ -1,0 +1,376 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===== Enums =====
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  DISPATCHER
+  SAFETY_OFFICER
+  FINANCE
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  ON_TRIP
+  IN_SHOP
+  RETIRED
+}
+
+enum TripStatus {
+  DRAFT
+  DISPATCHED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum DriverStatus {
+  ON_DUTY
+  OFF_DUTY
+  ON_LEAVE
+  SUSPENDED
+  ON_TRIP
+}
+
+enum LicenseCategory {
+  A
+  B
+  C
+  D
+  E
+}
+
+enum MaintenanceStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum ExpenseCategory {
+  FUEL
+  MAINTENANCE
+  TOLL
+  FINE
+  OTHER
+}
+
+enum ViolationSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+// ===== Models =====
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // hashed
+  name      String
+  role      UserRole @default(DISPATCHER)
+  tenantId  String
+  avatar    String?
+  deletedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  refreshTokens RefreshToken[]
+  auditLogs     AuditLog[]
+  drivers       Driver[]
+  trips         Trip[] @relation("TripCreatedBy")
+  violations    ViolationRecord[]
+
+  @@index([email, deletedAt])
+  @@index([tenantId, role])
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique // hashed
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, used])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
+}
+
+model Vehicle {
+  id                    String        @id @default(uuid())
+  licensePlate          String        @unique
+  make                  String
+  model                 String
+  year                  Int
+  type                  String
+  status                VehicleStatus @default(AVAILABLE)
+  odometer              Int           @default(0)
+  maxLoadCapacity       Float
+  fuelType              String
+  requiredLicenseCategory LicenseCategory
+  acquisitionDate       DateTime
+  region                String?
+  deletedAt             DateTime?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+
+  trips              Trip[]
+  maintenanceLogs    MaintenanceLog[]
+  fuelLogs           FuelLog[]
+  expenses           Expense[]
+  statusHistory      VehicleStatusHistory[]
+
+  @@index([status, deletedAt])
+  @@index([licensePlate])
+  @@index([acquisitionDate, status])
+  @@index([deletedAt])
+  @@map("vehicles")
+}
+
+model VehicleStatusHistory {
+  id        String        @id @default(uuid())
+  vehicleId String
+  fromStatus VehicleStatus?
+  toStatus  VehicleStatus
+  changedBy String
+  reason    String?
+  changedAt DateTime      @default(now())
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@index([vehicleId, changedAt])
+  @@map("vehicle_status_history")
+}
+
+model Driver {
+  id              String        @id @default(uuid())
+  userId          String?       @unique
+  name            String
+  email           String        @unique
+  phone           String
+  licenseNumber   String        @unique
+  licenseCategory LicenseCategory
+  licenseExpiryDate DateTime
+  status          DriverStatus  @default(OFF_DUTY)
+  safetyScore     Float         @default(100.0)
+  baseScore       Float         @default(100.0)
+  deletedAt       DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  user       User?
+  trips      Trip[]
+  violations ViolationRecord[]
+
+  @@index([status, deletedAt])
+  @@index([licenseExpiryDate])
+  @@index([licenseNumber])
+  @@index([deletedAt])
+  @@map("drivers")
+}
+
+model Trip {
+  id            String     @id @default(uuid())
+  vehicleId     String
+  driverId     String
+  createdById  String
+  origin       String
+  destination  String
+  status       TripStatus @default(DRAFT)
+  cargoWeight  Float
+  startTime     DateTime?
+  endTime       DateTime?
+  distanceKm   Float?
+  cancelReason  String?
+  deletedAt     DateTime?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  vehicle    Vehicle       @relation(fields: [vehicleId], references: [id])
+  driver     Driver        @relation(fields: [driverId], references: [id])
+  createdBy  User          @relation("TripCreatedBy", fields: [createdById], references: [id])
+  fuelLogs   FuelLog[]
+  expenses   Expense[]
+
+  @@index([status, deletedAt])
+  @@index([vehicleId, status])
+  @@index([driverId, status])
+  @@index([createdAt])
+  @@index([deletedAt])
+  @@map("trips")
+}
+
+model MaintenanceLog {
+  id                String            @id @default(uuid())
+  vehicleId         String
+  serviceType       String
+  description      String
+  cost              Float
+  odometer          Int
+  status            MaintenanceStatus @default(SCHEDULED)
+  scheduledDate     DateTime
+  completedDate     DateTime?
+  notes             String?
+  deletedAt         DateTime?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@index([vehicleId, status])
+  @@index([scheduledDate])
+  @@index([deletedAt])
+  @@map("maintenance_logs")
+}
+
+model FuelLog {
+  id            String   @id @default(uuid())
+  vehicleId     String
+  tripId        String?
+  liters        Float
+  cost          Float
+  station       String
+  date         DateTime @default(now())
+  efficiency   Float?
+  isAnomaly    Boolean  @default(false)
+  deletedAt    DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  trip    Trip?   @relation(fields: [tripId], references: [id], onDelete: SetNull)
+
+  @@index([vehicleId, date])
+  @@index([tripId])
+  @@index([isAnomaly])
+  @@index([deletedAt])
+  @@map("fuel_logs")
+}
+
+model Expense {
+  id        String         @id @default(uuid())
+  vehicleId String
+  tripId    String?
+  category  ExpenseCategory
+  amount    Float
+  date      DateTime       @default(now())
+  notes     String?
+  deletedAt DateTime?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  trip    Trip?   @relation(fields: [tripId], references: [id], onDelete: SetNull)
+
+  @@index([vehicleId, date])
+  @@index([category, date])
+  @@index([deletedAt])
+  @@map("expenses")
+}
+
+model ViolationRecord {
+  id          String           @id @default(uuid())
+  driverId    String
+  type        String
+  severity    ViolationSeverity
+  date        DateTime         @default(now())
+  tripId      String?
+  notes       String?
+  recordedBy  String
+  deletedAt   DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  driver Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [recordedBy], references: [id])
+
+  @@index([driverId, date])
+  @@index([severity])
+  @@index([deletedAt])
+  @@map("violation_records")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  action    String
+  ip        String
+  userAgent String
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([action, createdAt])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model SystemConfig {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String
+  description String
+  updatedBy   String?
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+
+  @@map("system_configs")
+}
+
+model FeatureFlag {
+  id            String   @id @default(uuid())
+  name          String   @unique
+  enabled       Boolean  @default(false)
+  description   String
+  lastChangedBy String?
+  updatedAt     DateTime @updatedAt
+  createdAt     DateTime @default(now())
+
+  @@map("feature_flags")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  type      String
+  severity  String
+  message   String
+  entityId  String?
+  entityType String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([read, createdAt])
+  @@index([entityType, entityId])
+  @@map("notifications")
+}
+
+model PasswordResetOTP {
+  id        String   @id @default(uuid())
+  email     String
+  otp       String   // hashed
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([email, used, expiresAt])
+  @@map("password_reset_otps")
+}
+
