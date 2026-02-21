@@ -33,84 +33,71 @@ http://localhost:3000
 ---
 
 
-📌 Overview
+## 📌 Overview
 
 FleetFlow replaces manual logbooks with a centralized digital fleet command center.
 
 It helps organizations manage:
 
-🚘 Vehicles
+- 🚘 Vehicles
+- 👨‍✈️ Drivers
+- 🚚 Trip Dispatch
+- 📊 Utilization & Performance Tracking
 
-👨‍✈️ Drivers
+---
 
-🚚 Trip Dispatch
+## 🎯 Key Features
 
-📊 Utilization & Performance Tracking
+### 📊 Command Center Dashboard
+- Active fleet tracking  
+- Utilization rate calculation  
+- Maintenance alerts  
+- Real-time updates  
 
-🎯 Key Features
-📊 Command Center Dashboard
+### 🚘 Vehicle Management
+- Add / Edit / Delete vehicles  
+- Unique license plate validation  
+- Capacity tracking (kg)  
+- Status control:
+  - Available  
+  - In Shop  
+  - On Trip  
 
-Active fleet tracking
+### 👨‍✈️ Driver Registry
+- Driver creation  
+- Assignment validation  
+- Compliance tracking (future scope)  
 
-Utilization rate calculation
+### 🚚 Trip Dispatch Logic
 
-Maintenance alerts
+**Workflow:**
+1. Select available vehicle  
+2. Assign driver  
+3. Enter cargo weight  
+4. Validate cargo < vehicle capacity  
+5. Dispatch  
 
-Real-time updates
+**Business Rules:**
+- Vehicles marked “In Shop” cannot be dispatched  
+- Cargo exceeding capacity is blocked  
+- Expired driver licenses block assignment (planned)  
 
-🚘 Vehicle Management
+---
 
-Add / Edit / Delete vehicles
+## 🏗️ Tech Stack
 
-Unique license plate validation
+| Layer | Technology |
+|--------|------------|
+| Backend | Flask + SQLAlchemy + SQLite |
+| Frontend | React 18 + Material UI |
+| API | RESTful JSON |
+| Database | SQLite (PostgreSQL-ready) |
 
-Capacity tracking (kg)
+---
 
-Status control:
+## 📁 Project Structure
 
-Available
-
-In Shop
-
-On Trip
-
-👨‍✈️ Driver Registry
-
-Driver creation
-
-Assignment validation
-
-Compliance tracking (future scope)
-
-🚚 Trip Dispatch Logic
-
-Workflow:
-
-Select available vehicle
-
-Assign driver
-
-Enter cargo weight
-
-Validate cargo < vehicle capacity
-
-Dispatch
-
-Business Rules:
-
-Vehicles marked “In Shop” cannot be dispatched
-
-Cargo exceeding capacity is blocked
-
-Expired driver licenses block assignment (planned)
-
-🏗️ Tech Stack
-Layer	Technology
-Backend	Flask + SQLAlchemy + SQLite
-Frontend	React 18 + Material UI
-API	RESTful JSON
-Database	SQLite (PostgreSQL-ready)
-📁 Project Structure
+```text
 fleetflow/
 │
 ├── backend/
@@ -131,56 +118,58 @@ fleetflow/
 │
 ├── README.md
 └── .gitignore
-🔌 API Endpoints
-Method	Endpoint	Description
-GET	/vehicles	List vehicles
-POST	/vehicles	Create vehicle
-GET	/drivers	List drivers
-POST	/drivers	Create driver
-GET	/dashboard	Fleet KPIs
-🧪 MVP Test Flow
+```
+## 🔌 API Endpoints
 
-Start backend
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET`  | `/vehicles`  | List vehicles |
+| `POST` | `/vehicles`  | Create vehicle |
+| `GET`  | `/drivers`   | List drivers |
+| `POST` | `/drivers`   | Create driver |
+| `GET`  | `/dashboard` | Fleet KPIs |
 
-Start frontend
+---
 
-Add vehicle (e.g., VAN001, 500kg)
+## 🧪 MVP Test Flow
 
-Add driver
+1. Start backend  
+2. Start frontend  
+3. Add vehicle (e.g., `VAN001`, `500kg`)  
+4. Add driver  
+5. Verify dashboard metrics update  
 
-Verify dashboard metrics update
+---
 
-🚧 Future Enhancements
+## 🚧 Future Enhancements
 
-Trip management system
+- Trip management system  
+- Maintenance scheduling  
+- Expense tracking  
+- Cost-per-km analytics  
+- Authentication (JWT)  
+- PostgreSQL production migration  
+- Deployment pipeline  
 
-Maintenance scheduling
+---
 
-Expense tracking
+## 🌍 Deployment (Optional)
 
-Cost-per-km analytics
+- **Frontend** → Vercel / Netlify  
+- **Backend** → Render / Railway  
+- **Database** → PostgreSQL  
 
-Authentication (JWT)
+---
 
-PostgreSQL production migration
+## 🤝 Contributing
 
-Deployment pipeline
-
-🌍 Deployment (Optional)
-
-Frontend → Vercel / Netlify
-
-Backend → Render / Railway
-
-Database → PostgreSQL
-
-🤝 Contributing
+```bash
 git checkout -b feature/new-feature
 git commit -m "Add new feature"
 git push origin feature/new-feature
-
+```
 Open a Pull Request for review.
 
-📄 License
+## 📄 License
 
 MIT License © 2026 FleetFlow Team
