@@ -1,8 +1,4 @@
-from flask import Flask, request, jsonify
-from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
-from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime, date
+
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
@@ -591,4 +587,5 @@ def analytics_monthly():
     return jsonify(result)
 
 if __name__ == '__main__':
+
     app.run(debug=True, port=5000)
