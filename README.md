@@ -1,96 +1,113 @@
-# FleetFlow 🚚 - Modular Fleet & Logistics Management System
+# 🚚 FleetFlow - Modular Fleet & Logistics Management System
 
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)
-![React 18+](https://img.shields.io/badge/react-18+-61DAFB.svg)
-
----
-
-## 🎯 Project Overview
-
-FleetFlow replaces manual logbooks with a **centralized digital hub** for:
-
-- Fleet lifecycle management  
-- Driver safety monitoring  
-- Financial performance tracking  
-
-### 👥 Target Users
-- Fleet Managers (vehicle health, scheduling)
-- Dispatchers (trip creation, cargo validation)
-- Safety Officers (driver compliance)
-- Financial Analysts (fuel spend, ROI)
+![Python](https://img.shields.io/badge/Python-3.9+-blue)
+![React](https://img.shields.io/badge/React-18+-61DAFB)
+![License](https://img.shields.io/badge/License-MIT-green)
 
 ---
 
-## ✨ Core Features
+## 📌 Overview
+
+FleetFlow replaces manual logbooks with a **centralized digital fleet command center**.
+
+It helps organizations manage:
+
+- 🚘 Vehicles
+- 👨‍✈️ Drivers
+- 🚚 Trip Dispatch
+- 📊 Utilization & Performance Tracking
+
+---
+
+## 🎯 Key Features
 
 ### 📊 Command Center Dashboard
-
-Active Fleet: 3/5 vehicles
-Maintenance Alerts: 1
-Utilization Rate: 60%
-Pending Cargo: 2 shipments
-
-
-**Filters:** Vehicle Type | Status | Region
+- Active fleet tracking
+- Utilization rate calculation
+- Maintenance alerts
+- Real-time updates
 
 ---
 
-### 🚘 Vehicle Registry
-- Full CRUD operations
-- License Plate (Unique ID)
-- Max Load Capacity (kg/tons)
-- Status:
+### 🚘 Vehicle Management
+- Add / Edit / Delete vehicles
+- Unique license plate validation
+- Capacity tracking (kg)
+- Status control:
   - Available
   - In Shop
   - On Trip
 
 ---
 
-### 🚚 Trip Dispatcher
-
-
-Create Trip Workflow:
-
-Select Available Vehicle + Driver
-
-Enter Cargo Weight
-
-VALIDATION: Cargo < Capacity ✓
-
-Status: Draft → Dispatched → Completed
-
+### 👨‍✈️ Driver Registry
+- Driver creation
+- Assignment validation
+- Compliance tracking (future scope)
 
 ---
 
-### 🔐 Key Logic Rules
+### 🚚 Trip Dispatch Logic
 
+**Workflow:**
+1. Select available vehicle
+2. Assign driver
+3. Enter cargo weight
+4. Validate cargo < vehicle capacity
+5. Dispatch
 
-Vehicle "In Shop" → Hidden from Dispatch
-Cargo 450kg < Van 500kg Capacity → PASS
-License Expired → Block Driver Assignment
-
+**Business Rules:**
+- Vehicles marked “In Shop” cannot be dispatched
+- Cargo exceeding capacity is blocked
+- Expired driver licenses block assignment (planned)
 
 ---
 
 ## 🏗️ Tech Stack
 
-| Component | Technology |
-|------------|------------|
+| Layer | Technology |
+|-------|------------|
 | Backend | Flask + SQLAlchemy + SQLite |
-| Frontend | React 18 + Material-UI |
+| Frontend | React 18 + Material UI |
 | API | RESTful JSON |
-| Real-time | Auto-refresh dashboard |
+| Database | SQLite (PostgreSQL-ready) |
 
 ---
 
-## 🚀 Quick Start
+## 📁 Project Structure
 
-### 1️⃣ Clone & Setup
+
+fleetflow/
+│
+├── backend/
+│ ├── app.py
+│ ├── models.py
+│ ├── instance/
+│ │ └── fleetflow.db
+│ └── requirements.txt
+│
+├── frontend/
+│ ├── public/
+│ ├── src/
+│ │ ├── App.js
+│ │ ├── index.js
+│ │ └── components/
+│ ├── package.json
+│ └── package-lock.json
+│
+├── README.md
+└── .gitignore
+
+
+---
+
+## 🚀 Getting Started
+
+### 1️⃣ Clone Repository
 
 ```bash
-git clone <your-repo-url>
-cd FleetFlow
+git clone https://github.com/vishesh-017/fleetflow.git
+cd fleetflow
 2️⃣ Backend Setup
 cd backend
 pip install -r requirements.txt
@@ -107,96 +124,56 @@ npm start
 Frontend runs at:
 
 http://localhost:3000
-4️⃣ MVP Test Workflow
-1. Open localhost:3000
-2. Add Vehicle: VAN001 + 500kg
-3. Add Driver: Alex
-4. Verify Dashboard updates
-
-✅ MVP COMPLETE
-
-📊 API Endpoints
+🔌 API Endpoints
 Method	Endpoint	Description
 GET	/vehicles	List vehicles
 POST	/vehicles	Create vehicle
 GET	/drivers	List drivers
 POST	/drivers	Create driver
-GET	/dashboard	KPI summary
-📁 Project Structure
-FleetFlow/
-│
-├── backend/
-│   ├── app.py
-│   └── fleetflow.db
-│
-├── frontend/
-│   ├── src/
-│   └── package.json
-│
-├── requirements.txt
-└── README.md
-👥 Team Sprint Plan (8hr MVP)
-Role	Time	Responsibility
-Tech Lead	2hr	Backend APIs + DB
-Frontend Dev	4hr	React UI
-Full Stack	1hr	API Integration
-QA	1hr	Testing
+GET	/dashboard	Fleet KPIs
+🧪 MVP Test Flow
 
-Daily Standup: 15 minutes
-Code Merge: GitHub PR
+Start backend
 
-🚧 Upcoming Features
-Sprint 2
+Start frontend
 
-Trip creation form
+Add vehicle (e.g., VAN001, 500kg)
 
-Cargo validation logic
+Add driver
 
-Maintenance auto-toggle
+Verify dashboard metrics update
 
-Sprint 3
+🚧 Future Enhancements
 
-Expense logging
+Trip management system
+
+Maintenance scheduling
+
+Expense tracking
 
 Cost-per-km analytics
 
-CSV/PDF export
+Authentication (JWT)
 
-🔒 Security
+PostgreSQL production migration
 
-SQLAlchemy ORM protection
+Deployment pipeline
 
-CORS enabled
+🌍 Deployment (Planned)
 
-PostgreSQL upgrade-ready
+Backend → Render / Railway
 
-JWT authentication (future enhancement)
+Frontend → Vercel / Netlify
 
-🌍 Deployment
-
-Backend:
-
-Render
-
-Heroku
-
-Frontend:
-
-Vercel
-
-Netlify
-
-Database:
-
-PostgreSQL (Railway / Supabase)
+Database → PostgreSQL
 
 🤝 Contributing
 git checkout -b feature/new-feature
 git commit -m "Add new feature"
 git push origin feature/new-feature
 
-Then open a Pull Request.
+Open a Pull Request for review.
 
 📄 License
 
-MIT License © 2026 Team FleetFlow
+MIT License © 2026 FleetFlow Team
