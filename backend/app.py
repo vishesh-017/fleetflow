@@ -1,6 +1,9 @@
-
+from flask import Flask, request, jsonify
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
+from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime, date
 from werkzeug.security import generate_password_hash, check_password_hash
-
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fleetflow.db'
 app.config['JWT_SECRET_KEY'] = 'fleetflow-secret-123'
@@ -9,7 +12,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
 CORS(app, resources={r"/*": {"origins": "*"}})
-
 
 # ─────────────────────────────────────────
 # MODELS
@@ -589,3 +591,4 @@ def analytics_monthly():
 if __name__ == '__main__':
 
     app.run(debug=True, port=5000)
+
